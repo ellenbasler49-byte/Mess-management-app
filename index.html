@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>মেস ম্যানেজমেন্ট সিস্টেম</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-badge">M</div>
+        <div>
+          <h1>মেস ম্যানেজমেন্ট</h1>
+          <p>Meal + বাজার হিসাব</p>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <label for="monthPicker">মাস নির্বাচন</label>
+        <input type="month" id="monthPicker" />
+      </div>
+
+      <div class="side-card">
+        <h3>Meal Weight</h3>
+        <p class="muted">প্রয়োজনে প্রতিটি meal-এর ওজন আলাদা করতে পারবেন</p>
+
+        <div class="weight-grid">
+          <div>
+            <label for="morningWeight">Morning</label>
+            <input type="number" id="morningWeight" min="0" step="0.1" />
+          </div>
+          <div>
+            <label for="eveningWeight">Evening</label>
+            <input type="number" id="eveningWeight" min="0" step="0.1" />
+          </div>
+          <div>
+            <label for="nightWeight">Night</label>
+            <input type="number" id="nightWeight" min="0" step="0.1" />
+          </div>
+        </div>
+
+        <button id="saveWeightsBtn" class="btn btn-primary full">Weight Save</button>
+      </div>
+
+      <div class="side-card">
+        <h3>ডাটা ম্যানেজমেন্ট</h3>
+        <button id="resetMonthBtn" class="btn btn-warning full">শুধু এই মাসের ডাটা রিসেট</button>
+        <button id="resetAllBtn" class="btn btn-danger full">সব ডাটা মুছে ফেলুন</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <h2>বাংলাদেশি মেস হিসাব সিস্টেম</h2>
+          <p class="muted">Fixed meal ভিত্তিক সদস্য, বাজার ও মাসিক cost management</p>
+        </div>
+        <div class="status-badge" id="saveStatus">ডাটা সেভড</div>
+      </header>
+
+      <section class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <span>সদস্য</span>
+          <strong id="totalMembersStat">0</strong>
+        </div>
+        <div class="stat-card">
+          <span>মোট Meal</span>
+          <strong id="totalMealsStat">0</strong>
+        </div>
+        <div class="stat-card">
+          <span>মোট বাজার</span>
+          <strong id="totalBazarStat">৳0</strong>
+        </div>
+        <div class="stat-card">
+          <span>Meal Rate</span>
+          <strong id="mealRateStat">৳0</strong>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h3>সদস্য ম্যানেজমেন্ট</h3>
+            <p class="muted">সদস্য সংখ্যা edit, add, delete করা যাবে</p>
+          </div>
+          <div class="pill">মোট সদস্য: <span id="memberCountPill">0</span></div>
+        </div>
+
+        <form id="memberForm" class="form-grid">
+          <div>
+            <label for="memberName">সদস্যের নাম</label>
+            <input type="text" id="memberName" placeholder="যেমন: Rahim" required />
+          </div>
+          <div>
+            <label for="memberPhone">মোবাইল (ঐচ্ছিক)</label>
+            <input type="text" id="memberPhone" placeholder="01XXXXXXXXX" />
+          </div>
+          <div class="form-action">
+            <button type="submit" class="btn btn-primary">সদস্য যোগ করুন</button>
+          </div>
+        </form>
+
+        <div id="membersList" class="members-list"></div>
+      </section>
+
+      <section class="two-col">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Meal Entry</h3>
+              <p class="muted">Morning, Evening, Night meal count</p>
+            </div>
+          </div>
+
+          <form id="mealForm" class="form-grid">
+            <div>
+              <label for="mealDate">তারিখ</label>
+              <input type="date" id="mealDate" required />
+            </div>
+            <div>
+              <label for="mealMember">সদস্য</label>
+              <select id="mealMember" required></select>
+            </div>
+            <div>
+              <label for="morningCount">Morning</label>
+              <input type="number" id="morningCount" min="0" value="0" required />
+            </div>
+            <div>
+              <label for="eveningCount">Evening</label>
+              <input type="number" id="eveningCount" min="0" value="0" required />
+            </div>
+            <div>
+              <label for="nightCount">Night</label>
+              <input type="number" id="nightCount" min="0" value="0" required />
+            </div>
+            <div>
+              <label for="mealNote">নোট</label>
+              <input type="text" id="mealNote" placeholder="ঐচ্ছিক" />
+            </div>
+            <div class="form-action full-row">
+              <button type="submit" class="btn btn-primary">Meal Save</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>বাজার Entry</h3>
+              <p class="muted">কার কত বাজার, কী কী কেনা হয়েছে</p>
+            </div>
+          </div>
+
+          <form id="bazarForm" class="form-grid">
+            <div>
+              <label for="bazarDate">তারিখ</label>
+              <input type="date" id="bazarDate" required />
+            </div>
+            <div>
+              <label for="bazarMember">যিনি বাজার করেছেন</label>
+              <select id="bazarMember" required></select>
+            </div>
+            <div>
+              <label for="bazarAmount">টাকা</label>
+              <input type="number" id="bazarAmount" min="0" step="0.01" placeholder="0" required />
+            </div>
+            <div>
+              <label for="bazarItems">কী কী বাজার</label>
+              <input type="text" id="bazarItems" placeholder="চাল, ডাল, সবজি..." />
+            </div>
+            <div class="full-row">
+              <label for="bazarNote">বিস্তারিত</label>
+              <textarea id="bazarNote" rows="3" placeholder="অতিরিক্ত বিস্তারিত লিখুন"></textarea>
+            </div>
+            <div class="form-action full-row">
+              <button type="submit" class="btn btn-primary">বাজার Save</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h3>মাসিক Summary</h3>
+            <p class="muted">প্রতি সদস্যের খাওয়া, বাজার, payable / receivable</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>সদস্য</th>
+                <th>Morning</th>
+                <th>Evening</th>
+                <th>Night</th>
+                <th>Total Counted Meal</th>
+                <th>বাজার দিয়েছেন</th>
+                <th>খাবারের খরচ</th>
+                <th>Balance</th>
+              </tr>
+            </thead>
+            <tbody id="summaryTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="two-col">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>Meal History</h3>
+              <p class="muted">এই মাসের সকল meal entry</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>তারিখ</th>
+                  <th>সদস্য</th>
+                  <th>M</th>
+                  <th>E</th>
+                  <th>N</th>
+                  <th>নোট</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="mealTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>বাজার History</h3>
+              <p class="muted">এই মাসের সকল বাজার entry</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>তারিখ</th>
+                  <th>সদস্য</th>
+                  <th>টাকা</th>
+                  <th>Items</th>
+                  <th>বিস্তারিত</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="bazarTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
